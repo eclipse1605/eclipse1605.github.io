@@ -14,6 +14,11 @@ Below is the working note as a rendered page.
 
 ---
 
+<div class="hero-links" style="margin:12px 0;">
+  <a class="btn" href="/misc/notes%20of%20wgf.pdf" download>Download PDF — WGF notes</a>
+  <a class="btn ghost" href="/misc/notes%20of%20wgf.pdf" target="_blank" rel="noopener">Open PDF</a>
+</div>
+
 wgf is gradient descent but for if a position is an entire probability distribution $\mu$.
 
 basically if the thing you want to minimise is a functional $\mathcal{F}[\mu]$ that take a distribution as input and gives an output as a number
