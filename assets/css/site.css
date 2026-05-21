@@ -289,6 +289,7 @@ pre code, pre code.hljs, pre.hljs {
 .about-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.05fr) minmax(0, 1.4fr);
+  align-items: start;
   gap: 24px;
 }
 
@@ -428,11 +429,12 @@ pre code, pre code.hljs, pre.hljs {
 }
 
 .misc-frame {
+  display: block;
   width: 100%;
   border: 1px solid var(--border);
   border-radius: 16px;
   background: var(--card);
-  min-height: 520px;
+  min-height: min(680px, 76vh);
 }
 
 .nb-container {
@@ -540,7 +542,7 @@ pre code, pre code.hljs, pre.hljs {
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  margin-top: 12px;
+  margin: 22px 0 18px;
 }
 
 .misc-note {
