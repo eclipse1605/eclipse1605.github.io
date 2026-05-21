@@ -14,15 +14,15 @@ Below is the working note as a rendered page.
 
 ---
 
-wgf is gradient descent but for if a position is an entire probability distribution \(\mu\).
+wgf is gradient descent but for if a position is an entire probability distribution $\mu$.
 
-basically if the thing you want to minimise is a functional \(\mathcal{F}[\mu]\) that take a distribution as input and gives an output as a number
+basically if the thing you want to minimise is a functional $\mathcal{F}[\mu]$ that take a distribution as input and gives an output as a number
 
 then can you write down a velocity for a distribution? can you flow downhill in the space of distributions?
 
 for this 3 things are req
 - notion of distance between distributions to define motion.
-- notion of gradient of a functional \(\mathcal{F}[\mu]\) so you know which direction is downhill.
+- notion of gradient of a functional $\mathcal{F}[\mu]$ so you know which direction is downhill.
 - and the two things need to be compatible, i.e., the gradient must be defined with respect to the same geometry that the distance measures.
 
 ---
@@ -30,7 +30,7 @@ for this 3 things are req
 
 kl divergence is the most natural way to compare two distributions
 
-\[\text{KL}(\mu | \nu) = \int \mu(x) \log \frac{\mu(x)}{\nu(x)} \,dx\]
+$$\text{KL}(\mu | \nu) = \int \mu(x) \log \frac{\mu(x)}{\nu(x)} dx$$
 
 its a weighted average of $\log(\mu/\nu)$, where the weights come from $\mu$ itself.
 
@@ -69,7 +69,7 @@ work depends on two things:
 
 wasserstein-2 distance gives us this, formally defined as
 
-\[W_2^2(\mu, \nu) = \inf_{\pi \in \Pi(\mu,\nu)} \int_{\mathbb{R}^n \times \mathbb{R}^n} |x - y|^2 \,d\pi(x, y)\]
+$$W_2^2(\mu, \nu) = \inf_{\pi \in \Pi(\mu,\nu)} \int_{\mathbb{R}^n \times \mathbb{R}^n} |x - y|^2 , d\pi(x, y)$$
 
 here
 - $\pi(x, y)$ is a coupling. its a joint probability distribution on pairs $(x, y)$ where $x$ comes from the source and $y$ from the target.
@@ -80,16 +80,16 @@ here
 - $|x - y|^2$ is the cost of moving a unit of mass from $x$ to $y$.
 - so $\int |x-y|^2 d\pi(x,y)$ is the total cost of the transport plan $\pi$: add up cost times mass for every pair. the infimum over all valid $\pi$ picks the cheapest possible transport plan.
 
-for the above dirac delta example, \(W_2^2(\delta_0, \delta_\varepsilon)\) asks whats the cheapest way to move all the mass from 0 to \(\varepsilon\)? the only valid coupling is \(\pi = \delta_{(0,\varepsilon)}\), that is, move everything from 0 to \(\varepsilon\).  the cost is \(|0 - \varepsilon|^2 = \varepsilon^2\). so \(W_2(\delta_0, \delta_\varepsilon) = \varepsilon\) and as \(\varepsilon \to 0\), the distance goes to zero.
+for the above dirac delta example, $W_2^2(\delta_0, \delta_\varepsilon)$ asks whats the cheapest way to move all the mass from 0 to $\varepsilon$? the only valid coupling is $\pi = \delta_{(0,\varepsilon)}$, that is, move everything from 0 to $\varepsilon$.  the cost is $|0 - \varepsilon|^2 = \varepsilon^2$. so $W_2(\delta_0, \delta_\varepsilon) = \varepsilon$ and as $\varepsilon \to 0$, the distance goes to zero.
 
 ---
 ### how does the optimal plan look like?
 
 in principle, $\pi$ could be stochastic meaning it could split the mass at $x$  and 40% goes to $y_1$ and 60% goes to $y_2$. but breniers theorem says a split is never req.
 
-**theorem**: if \(\mu\) is absolutely continuous (has a density, no point masses), then the unique optimal transport plan is deterministic, meaning, there exists a convex function \(\psi: \mathbb{R}^n \to \mathbb{R}\) such that the optimal \(\pi\) is supported on the graph of \(T = \nabla\psi\), i.e.,
+**theorem**: if $\mu$ is absolutely continuous (has a density, no point masses), then the unique optimal transport plan is deterministic, meaning, there exists a convex function $\psi: \mathbb{R}^n \to \mathbb{R}$ such that the optimal $\pi$ is supported on the graph of $T = \nabla\psi$, i.e.,
 
-\[\pi = (\text{id}, T)_{\#}\mu, \qquad T = \nabla\psi\]
+$$\pi = (\text{id}, T)_{\#}\mu, \qquad T = \nabla\psi$$
 
 the map $T$ sends each point $x$ to exactly one point $T(x)$. every grain of sand at location $x$ goes to location $T(x)$ without splitting.
 
@@ -124,14 +124,13 @@ in riemannian geometry, the length of a curve $\gamma(t)$ from time 0 to time 1 
 
 we need something analogous to this for wasserstein.
 
-
 the benamou-brenier formula says
 
-\[W_2^2(\mu_0, \mu_1) = \inf_{(\mu_t, v_t)} \int_0^1 \int_{\mathbb{R}^n} |v_t(x)|^2 \,d\mu_t(x) \,dt\]
+$$W_2^2(\mu_0, \mu_1) = \inf_{(\mu_t, v_t)} \int_0^1 \int_{\mathbb{R}^n} |v_t(x)|^2 , d\mu_t(x) , dt$$
 
 where the infimum is over all pairs $(\mu_t, v_t)$ satisfying the continuity equation:
 
-\[\partial_t \mu_t + \operatorname{div}(v_t \mu_t) = 0\]
+$$\partial_t \mu_t + \text{div}(v_t \mu_t) = 0$$
 
 this is prolly the most important part of this whole thing.
 
@@ -213,15 +212,15 @@ how to differentiate a even functional.
 
 in normal calc, the derivative of $f: \mathbb{R}^n \to \mathbb{R}$ at $x$ in direction $v$ is:
 
-\[Df(x)[v] = \lim_{\varepsilon \to 0} \frac{f(x + \varepsilon v) - f(x)}{\varepsilon}\]
+$$Df(x)[v] = \lim_{\varepsilon \to 0} \frac{f(x + \varepsilon v) - f(x)}{\varepsilon}$$
 
 so for a functional $\mathcal{F}[\mu]$ that takes a distribution and gives a number, we perturb $\mu$ by a tiny signed measure $\sigma$ (add a little mass somewhere and remove a little elsewhere), and ask how $\mathcal{F}$ responds:
 
-\[D\mathcal{F}[\mu][\sigma] = \lim_{\varepsilon \to 0} \frac{\mathcal{F}[\mu + \varepsilon\sigma] - \mathcal{F}[\mu]}{\varepsilon}\]
+$$D\mathcal{F}[\mu][\sigma] = \lim_{\varepsilon \to 0} \frac{\mathcal{F}[\mu + \varepsilon\sigma] - \mathcal{F}[\mu]}{\varepsilon}$$
 
 if $\mathcal{F}$ is nice enough, this linear functional of $\sigma$ can be represented as an inner product:
 
-\[D\mathcal{F}[\mu][\sigma] = \int \frac{\delta\mathcal{F}}{\delta\mu}(x) \,d\sigma(x)\]
+$$D\mathcal{F}[\mu][\sigma] = \int \frac{\delta\mathcal{F}}{\delta\mu}(x) , d\sigma(x)$$
 
 the function $\frac{\delta\mathcal{F}}{\delta\mu}(x)$ is called the first variation of $\mathcal{F}$ at $\mu$.
 
@@ -239,13 +238,13 @@ perturb: $\mathcal{F}[\mu + \varepsilon\sigma] = \int (\mu+\varepsilon\sigma)\lo
 
 expand using $\log(\mu+\varepsilon\sigma) \approx \log\mu + \varepsilon\sigma/\mu$ for small $\varepsilon$:
 
-\[\mathcal{F}[\mu + \varepsilon\sigma] \approx \int (\mu+\varepsilon\sigma)(\log\mu + \varepsilon\sigma/\mu) \,dx \approx \mathcal{F}[\mu] + \varepsilon\int\sigma\log\mu \,dx + \varepsilon\int\sigma \,dx\]
+$$\mathcal{F}[\mu + \varepsilon\sigma] \approx \int (\mu+\varepsilon\sigma)(\log\mu + \varepsilon\sigma/\mu) dx \approx \mathcal{F}[\mu] + \varepsilon\int\sigma\log\mu , dx + \varepsilon\int\sigma , dx$$
 
 since $\sigma$ is a signed measure with $\int \sigma = 0$ (youre not changing the total mass), the last term vanishes.
 
 so
 
-\[D\mathcal{F}[\mu][\sigma] = \int \sigma(x) \log\mu(x) \,dx + \int\sigma \,dx = \int \sigma(x)(\log\mu(x) + 1) \,dx\]
+$$D\mathcal{F}[\mu][\sigma] = \int \sigma(x) \log\mu(x) , dx + \int\sigma , dx = \int \sigma(x)(\log\mu(x) + 1) , dx$$
 
 therefore $\frac{\delta\mathcal{F}}{\delta\mu}(x) = \log\mu(x) + 1$.
 
@@ -268,7 +267,7 @@ this just means that adding mass to a high potential region costs more. which ma
 
 in a riemannian manifold, the gradient $\text{grad}_{g}\mathcal{F}$ at a point $\mu$ is defined by the identity: for every tangent vector $\nabla\phi$,
 
-\[g_\mu\bigl(\text{grad}_W \mathcal{F}, \nabla\phi\bigr) = D\mathcal{F}[\mu][\text{direction corresponding to }\nabla\phi]\]
+$$g_\mu(\text{grad}_W \mathcal{F}, \nabla\phi) = D\mathcal{F}[\mu][\text{direction corresponding to }\nabla\phi]$$
 
 the rhs side is the directional derivative of $\mathcal{F}$ in the direction $\nabla\phi$. and the lhs defines the gradient as the unique tangent vector whose inner product with any direction equals the directional derivative in that direction.
 
@@ -277,11 +276,11 @@ this is exactly how gradients are defined in any inner product space.
 understanding rhs:
 if $\mu_t$ is a curve with velocity field $v_t = \nabla\phi$ (so its tangent at $t=0$ is $\nabla\phi$), then by the continuity equation, $\partial_t\mu_t = -\text{div}(\mu_t \nabla\phi)$. The directional derivative is:
 
-\[D\mathcal{F}[\mu][-\operatorname{div}(\mu\nabla\phi)] = \int \frac{\delta\mathcal{F}}{\delta\mu}(x) \cdot (-\operatorname{div}(\mu\nabla\phi)) \,dx\]
+$$D\mathcal{F}[\mu][-\text{div}(\mu\nabla\phi)] = \int \frac{\delta\mathcal{F}}{\delta\mu}(x) \cdot (-\text{div}(\mu\nabla\phi)) , dx$$
 
 so we have $-\text{div}(\mu\nabla\phi)$ as the perturbation $\sigma$. integration by parts (shifting the derivative from the divergence onto the first variation) gives
 
-\[\int \frac{\delta\mathcal{F}}{\delta\mu} \cdot (-\operatorname{div}(\mu\nabla\phi)) \,dx = \int \nabla\left(\frac{\delta\mathcal{F}}{\delta\mu}\right) \cdot \nabla\phi \,d\mu\]
+$$\int \frac{\delta\mathcal{F}}{\delta\mu} \cdot (-\text{div}(\mu\nabla\phi)) , dx = \int \nabla\left(\frac{\delta\mathcal{F}}{\delta\mu}\right) \cdot \nabla\phi , d\mu$$
 
 here we have the integral $\int f \cdot (-\text{div}(\mathbf{g})) dx$ where $f = \delta\mathcal{F}/\delta\mu$ and $\mathbf{g} = \mu\nabla\phi$.
 
@@ -293,15 +292,15 @@ so the directional derivative becomes $\int \nabla(\delta\mathcal{F}/\delta\mu) 
 
 now understanding lhs:
 
-\[g_\mu(\text{grad}_W\mathcal{F}, \nabla\phi) = \int \text{grad}_W\mathcal{F} \cdot \nabla\phi \,d\mu\]
+$$g_\mu(\text{grad}_W\mathcal{F}, \nabla\phi) = \int \text{grad}_W\mathcal{F} \cdot \nabla\phi , d\mu$$
 
 comparing with the right-hand side:
 
-\[\int \underbrace{\text{grad}_W\mathcal{F}(x)}_{\text{what we want}} \cdot \nabla\phi(x) \,d\mu(x) = \int \underbrace{\nabla\left(\frac{\delta\mathcal{F}}{\delta\mu}(x)\right)}_{\text{what we computed}} \cdot \nabla\phi(x) \,d\mu(x)\]
+$$\int \underbrace{\text{grad}_W\mathcal{F}(x)}_{\text{what we want}} \cdot \nabla\phi(x) , d\mu(x) = \int \underbrace{\nabla\left(\frac{\delta\mathcal{F}}{\delta\mu}(x)\right)}_{\text{what we computed}} \cdot \nabla\phi(x) , d\mu(x)$$
 
 since this must hold for _every_ $\nabla\phi$, the two integrands must match:
 
-\[\boxed{\text{grad}_{W_2}\mathcal{F}\mu = \nabla\left(\frac{\delta\mathcal{F}}{\delta\mu}\right)(x)}\]
+$$\boxed{\text{grad}_{W_2}\mathcal{F}\mu = \nabla\left(\frac{\delta\mathcal{F}}{\delta\mu}\right)(x)}$$
 
 this means the wasserstein gradient is not $\delta\mathcal{F}/\delta\mu$ itself but the spatial gradient of $\delta\mathcal{F}/\delta\mu$.
 
@@ -316,11 +315,11 @@ the first variation $\delta\mathcal{F}/\delta\mu$ is like a pressure field so pa
 
 now we have the wassserstein gradient. writing the gradient flow is ez now. following the negative gradient:
 
-\[\frac{d\mu_t}{dt} = -\text{grad}_{W_2}\mathcal{F}[\mu_t] \quad \text{in the riemannian sense}\]
+$$\frac{d\mu_t}{dt} = -\text{grad}_{W_2}\mathcal{F}[\mu_t] \quad \text{in the riemannian sense}$$
 
 means via the continuity equation that the distribution moves with velocity $-\text{grad}_{W_2}\mathcal{F} = -\nabla(\delta\mathcal{F}/\delta\mu)$:
 
-\[\partial_t \mu_t = -\operatorname{div}\left(\mu_t \cdot \left(-\nabla\left(\frac{\delta\mathcal{F}}{\delta\mu_t}\right)\right)\right) = \operatorname{div}\left(\mu_t \cdot \nabla\left(\frac{\delta\mathcal{F}}{\delta\mu_t}\right)\right)\]
+$$\partial_t \mu_t = -\text{div}\left(\mu_t \cdot \left(-\nabla\left(\frac{\delta\mathcal{F}}{\delta\mu_t}\right)\right)\right) = \text{div}\left(\mu_t \cdot \nabla\left(\frac{\delta\mathcal{F}}{\delta\mu_t}\right)\right)$$
 
 this says the density $\mu_t$ at position $x$ changes because mass is flowing.
 
@@ -363,7 +362,7 @@ wasserstein gradient: $\nabla(\log\mu + 1) = \nabla\log\mu = \frac{\nabla\mu}{\m
 
 plug into the gradient flow pde:
 
-\[\partial_t\mu_t = \operatorname{div}\left(\mu_t \cdot \frac{\nabla\mu_t}{\mu_t}\right) = \operatorname{div}(\nabla\mu_t) = \Delta\mu_t\]
+$$\partial_t\mu_t = \text{div}\left(\mu_t \cdot \frac{\nabla\mu_t}{\mu_t}\right) = \text{div}(\nabla\mu_t) = \Delta\mu_t$$
 
 this is literally the heat equation
 
@@ -394,7 +393,7 @@ wasserstein gradient: $\nabla(\log\mu + 1 + V) = \frac{\nabla\mu}{\mu} + \nabla 
 
 gradient flow:
 
-\[\partial_t\mu_t = \operatorname{div}\left(\mu_t\left(\frac{\nabla\mu_t}{\mu_t} + \nabla V\right)\right) = \operatorname{div}(\nabla\mu_t) + \operatorname{div}(\mu_t\nabla V) = \Delta\mu_t + \operatorname{div}(\mu_t\nabla V)\]
+$$\partial_t\mu_t = \text{div}\left(\mu_t\left(\frac{\nabla\mu_t}{\mu_t} + \nabla V\right)\right) = \text{div}(\nabla\mu_t) + \text{div}(\mu_t\nabla V) = \Delta\mu_t + \text{div}(\mu_t\nabla V)$$
 
 - $\Delta\mu_t$ is diffusion
 - $\text{div}(\mu_t\nabla V)$ is the effect of the potential.
@@ -412,20 +411,28 @@ for eqm, the flow stops when $\partial_t\mu = 0$, which requires both terms to c
 setting $\text{div}(\nabla\mu + \mu\nabla V) = 0$, one can show the solution is $\mu^* \propto e^{-V(x)}$.
 
 if
-
-\[\mu^* = \frac{e^{-V}}{Z},\]
-
+$$
+\mu^* = \frac{e^{-V}}{Z},
+$$
 then
-
-\[\nabla \mu^* = \nabla\!\left(\frac{e^{-V}}{Z}\right) = -\frac{e^{-V}}{Z}\,\nabla V = -\mu^* \nabla V.\]
+$$
+\nabla \mu^*
+= \nabla\!\left(\frac{e^{-V}}{Z}\right)
+= -\frac{e^{-V}}{Z}\,\nabla V
+= -\mu^* \nabla V.
+$$
 
 so
-
-\[\nabla \mu^* + \mu^* \nabla V = -\mu^* \nabla V + \mu^* \nabla V = 0.\]
+$$
+\nabla \mu^* + \mu^* \nabla V
+= -\mu^* \nabla V + \mu^* \nabla V
+= 0.
+$$
 
 hence the flux vanishes everywhere:
-
-\[J = -\bigl(\nabla \mu^* + \mu^* \nabla V\bigr)=0.\]
+$$
+J = -\bigl(\nabla \mu^* + \mu^* \nabla V\bigr)=0.
+$$
 
 sys has reached equilibrium.
 
@@ -461,7 +468,7 @@ this is implicit because $x_{k+1}$ appears on both sides.
 
 solving it is eq to:
 
-\[x_{k+1} = \underset{x}{\arg\min}\; f(x) + \frac{1}{2\tau}|x - x_k|^2\]
+$$x_{k+1} = \underset{x}{\arg\min}; f(x) + \frac{1}{2\tau}|x - x_k|^2$$
 
 in this ot we want to decrease $f(x)$, but we dont wanna move v far from $x_k$ (the penalty $|x-x_k|^2/2\tau$).
 
@@ -469,7 +476,7 @@ the parameter $\tau$ controls the tradeoff: large $\tau$ means the penalty is we
 
 we replace $x \in \mathbb{R}^n$ with $\mu \in \mathcal{P}_2(\mathbb{R}^n)$, replace $f$ with $\mathcal{F}$, and replace $|x-x_k|^2$ with $W_2^2(\mu, \mu_k)$:
 
-\[\mu_{k+1} = \underset{\mu \in \mathcal{P}_2}{\arg\min}\; \mathcal{F}[\mu] + \frac{1}{2\tau}W_2^2(\mu, \mu_k)\]
+$$\mu_{k+1} = \underset{\mu \in \mathcal{P}_2}{\arg\min}; \mathcal{F}[\mu] + \frac{1}{2\tau}W_2^2(\mu, \mu_k)$$
 
 we want to find the distribution $\mu$ that minimises the sum of two competing terms:
 - $\mathcal{F}[\mu]$ pulls $\mu$ toward the minimum of the energy. it wants $\mu$ to be as close to the equilibrium distribution as possible.
@@ -482,13 +489,13 @@ why is this automatically energy stable though?
 
 at the optimal $\mu_{k+1}$, we have:
 
-\[\mathcal{F}[\mu_{k+1}] + \frac{1}{2\tau}W_2^2(\mu_{k+1}, \mu_k) \leq \mathcal{F}[\mu_k] + \frac{1}{2\tau}W_2^2(\mu_k, \mu_k) = \mathcal{F}[\mu_k]\]
+$$\mathcal{F}[\mu_{k+1}] + \frac{1}{2\tau}W_2^2(\mu_{k+1}, \mu_k) \leq \mathcal{F}[\mu_k] + \frac{1}{2\tau}W_2^2(\mu_k, \mu_k) = \mathcal{F}[\mu_k]$$
 
 the inequality holds because $\mu_{k+1}$ is the minimiser (it beats any competitor, including $\mu_k$ itself (which gives the rhs, since $W_2(\mu_k, \mu_k) = 0$)).
 
 so
 
-\[\mathcal{F}[\mu_{k+1}] \leq \mathcal{F}[\mu_k] - \frac{1}{2\tau}W_2^2(\mu_{k+1}, \mu_k)\]
+$$\mathcal{F}[\mu_{k+1}] \leq \mathcal{F}[\mu_k] - \frac{1}{2\tau}W_2^2(\mu_{k+1}, \mu_k)$$
 
 the energy decreases by at least $\frac{1}{2\tau}W_2^2(\mu_{k+1},\mu_k)$ at every step, regardless of how large $\tau$ is
 
@@ -503,7 +510,7 @@ the variation of $W_2^2(\mu, \mu_k)$ with respect to $\mu$ at the minimiser is t
 
 the optimality condition is:
 
-\[\frac{\delta\mathcal{F}}{\delta\mu}\bigg|_{\mu_{k+1}} - \frac{\phi}{\tau} = \text{constant on supp}(\mu_{k+1})\]
+$$\frac{\delta\mathcal{F}}{\delta\mu}\bigg|_{\mu_{k+1}} - \frac{\phi}{\tau} = \text{constant on supp}(\mu_{k+1})$$
 
 where $\nabla\phi$ is the optimal transport map from $\mu_{k+1}$ to $\mu_k$ (by Brenier, $\nabla\phi$ pushes $\mu_{k+1}$ forward to $\mu_k$).
 
@@ -523,11 +530,11 @@ the velocity is $-\nabla(\delta\mathcal{F}/\delta\mu)$, exactly minus the wasser
 
 now, the continuity equation for this particle motion gives:
 
-\[\frac{\mu_{k+1} - \mu_k}{\tau} = \operatorname{div}\left(\mu_{k+1}\nabla\left(\frac{\delta\mathcal{F}}{\delta\mu_{k+1}}\right)\right) + O(\tau)\]
+$$\frac{\mu_{k+1} - \mu_k}{\tau} = \text{div}\left(\mu_{k+1}\nabla\left(\frac{\delta\mathcal{F}}{\delta\mu_{k+1}}\right)\right) + O(\tau)$$
 
 as $\tau \to 0$, this converges to:
 
-\[\partial_t\mu_t = \operatorname{div}\left(\mu_t\nabla\left(\frac{\delta\mathcal{F}}{\delta\mu_t}\right)\right)\]
+$$\partial_t\mu_t = \text{div}\left(\mu_t\nabla\left(\frac{\delta\mathcal{F}}{\delta\mu_t}\right)\right)$$
 
 this is the continuous wgf.
 
