@@ -55,7 +55,17 @@
             <a href="{{ '/' | relative_url }}#blogs">Blogs</a>
             <a href="{{ '/misc/' | relative_url }}">Misc</a>
           </nav>
-          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false"><span class="theme-icon">🌞</span></button>
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">
+            <span class="theme-icon" aria-hidden="true">
+              <svg class="icon icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <circle cx="12" cy="12" r="4"></circle>
+                <path d="M12 2v2M12 20v2M20 12h2M2 12H4M17.657 6.343l1.414 1.414M4.929 19.071l1.414-1.414M17.657 17.657l1.414-1.414M4.929 4.929L6.343 6.343" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+              <svg class="icon icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round"></path>
+              </svg>
+            </span>
+          </button>
         </div>
       </div>
     </header>
@@ -65,7 +75,6 @@
     <footer class="site-footer">
       <div class="container footer-inner">
         <span>Copyright {{ site.time | date: "%Y" }} {{ site.author }}.</span>
-        <span>Built for GSoC.</span>
       </div>
     </footer>
     <script>
@@ -104,8 +113,12 @@
           const isDark = root.dataset.theme === "dark";
           if (toggle) {
             toggle.setAttribute("aria-pressed", String(isDark));
-            const icon = toggle.querySelector('.theme-icon');
-            if (icon) icon.textContent = isDark ? '🌜' : '🌞';
+            const sun = toggle.querySelector('.icon-sun');
+            const moon = toggle.querySelector('.icon-moon');
+            if (sun && moon) {
+              sun.style.display = isDark ? 'none' : 'inline-block';
+              moon.style.display = isDark ? 'inline-block' : 'none';
+            }
           }
         };
 

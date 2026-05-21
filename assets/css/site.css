@@ -1,4 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Fraunces:wght@300;400;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fraunces:wght@300;400;600;700&family=Space+Grotesk:wght@300;400;500;600;700&display=swap");
 
 :root {
   color-scheme: light;
@@ -55,7 +55,7 @@ body {
   min-height: 100vh;
   color: var(--ink);
   background: var(--bg);
-  font-family: "Space Grotesk", "Segoe UI", sans-serif;
+  font-family: "Inter", "Space Grotesk", "Segoe UI", sans-serif;
   line-height: 1.6;
 }
 
@@ -177,6 +177,21 @@ img {
   font-size: 1.05rem;
   display: inline-block;
   line-height: 1;
+}
+
+.theme-toggle svg {
+  width: 1.05rem;
+  height: 1.05rem;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.theme-toggle .icon-moon {
+  display: none;
+}
+
+.katex {
+  color: var(--ink);
 }
 
 /* Ensure HLJS blocks have sane spacing when the remote theme is present */
@@ -395,7 +410,7 @@ pre code, pre code.hljs, pre.hljs {
   padding: 10px 14px;
   border-radius: 12px;
   border: 1px solid var(--border);
-  background: rgba(255, 255, 255, 0.7);
+  background: var(--card);
   transition: border 0.2s ease, transform 0.2s ease;
   font-weight: 600;
 }
@@ -409,7 +424,7 @@ pre code, pre code.hljs, pre.hljs {
   width: 100%;
   border: 1px solid var(--border);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.85);
+  background: var(--card);
   min-height: 520px;
 }
 
@@ -419,7 +434,7 @@ pre code, pre code.hljs, pre.hljs {
 }
 
 .nb-cell {
-  background: rgba(255, 255, 255, 0.92);
+  background: var(--card);
   border: 1px solid var(--border);
   border-radius: 16px;
   padding: 18px;
@@ -436,8 +451,8 @@ pre code, pre code.hljs, pre.hljs {
 }
 
 .nb-source {
-  background: #1f1b16;
-  color: #f4eee6;
+  background: var(--code-bg);
+  color: var(--code-ink);
   padding: 14px;
   border-radius: 12px;
   overflow-x: auto;
@@ -586,7 +601,7 @@ pre code, pre code.hljs, pre.hljs {
 }
 
 .post-content {
-  background: rgba(255, 255, 255, 0.9);
+  background: var(--card);
   border-radius: 22px;
   padding: 28px;
   border: 1px solid var(--border);

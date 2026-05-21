@@ -20,7 +20,6 @@ math: true
         <div class="misc-actions">
           <a class="btn" href="{{ item.url | relative_url }}">Open</a>
         </div>
-        <p class="misc-note">Rendered pages support LaTeX via KaTeX.</p>
       </div>
     {% endfor %}
 

@@ -55,7 +55,6 @@ title: Home
 <section id="blogs" class="section">
   <div class="section-header">
     <h2>Blogs</h2>
-    <p>Posts are written in Markdown and published from the <code>_posts</code> folder.</p>
   </div>
   <div class="post-list stagger">
     {% for post in site.posts %}
