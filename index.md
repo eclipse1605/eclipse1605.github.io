@@ -79,7 +79,7 @@ title: Home
     {% assign misc_pages = site.pages | where: "layout", "misc" %}
     {% assign misc_sorted = misc_pages | sort: 'date' | reverse %}
     {% for item in misc_sorted limit:3 %}
-      <div class="about-card">
+      <div class="about-card post-card">
         {% if item.misc_type %}
           <span class="tag">{{ item.misc_type | capitalize }}</span>
         {% endif %}

@@ -13,7 +13,7 @@ math: true
     {% assign misc_pages = site.pages | where: "layout", "misc" | sort: 'date' | reverse %}
     {% for page in misc_pages %}
       {% unless page.url == '/misc/' %}
-        <div class="about-card">
+        <div class="about-card post-card">
           {% if page.misc_type %}
             <span class="tag">{{ page.misc_type | capitalize }}</span>
           {% endif %}
