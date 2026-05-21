@@ -35,7 +35,7 @@ for this 3 things are req
 
 kl divergence is the most natural way to compare two distributions
 
-$$\text{KL}(\mu | \nu) = \int \mu(x) \log \frac{\mu(x)}{\nu(x)} dx$$
+$$\text{KL}(\mu \mid \nu) = \int \mu(x) \log \frac{\mu(x)}{\nu(x)} dx$$
 
 its a weighted average of $\log(\mu/\nu)$, where the weights come from $\mu$ itself.
 
@@ -43,13 +43,13 @@ my understanding of it is just how different is $\mu$ from $\nu$.
 
 so large values mean the two distributions are very different and $\text{KL}=0$ means $\mu = \nu$.
 
-taking a trivial example of two dirac deltas, $\mu = \delta_0$ and $\nu = \delta_\varepsilon$. these two distributions look visually almost identical for small $\varepsilon$. for this what would be $\text{KL}(\mu | \nu)$?
+taking a trivial example of two dirac deltas, $\mu = \delta_0$ and $\nu = \delta_\varepsilon$. these two distributions look visually almost identical for small $\varepsilon$. for this what would be $\text{KL}(\mu \mid \nu)$?
 
 the density of $\mu$ is zero everywhere except at 0, and the density of $\nu$ is zero everywhere except at $\varepsilon$.
 
 so the ratio $\mu(x)/\nu(x)$ is undefined where one is zero and the other isnt.
 
-so the integral is infinite. $\text{KL}(\delta_0 | \delta_\varepsilon) = +\infty$ for any $\varepsilon > 0$
+so the integral is infinite. $\text{KL}(\delta_0 \mid \delta_\varepsilon) = +\infty$ for any $\varepsilon > 0$
 
 now if you try to do gradient descent on a functional involving kl, the energy landscape would have infinite walls everywhere. you cant move a distribution even a lil without the energy blowing up.
 
@@ -74,7 +74,7 @@ work depends on two things:
 
 wasserstein-2 distance gives us this, formally defined as
 
-$$W_2^2(\mu, \nu) = \inf_{\pi \in \Pi(\mu,\nu)} \int_{\mathbb{R}^n \times \mathbb{R}^n} |x - y|^2 , d\pi(x, y)$$
+$$W_2^2(\mu, \nu) = \inf_{\pi \in \Pi(\mu,\nu)} \int_{\mathbb{R}^n \times \mathbb{R}^n} \lvert x - y\rvert^2 , d\pi(x, y)$$
 
 here
 - $\pi(x, y)$ is a coupling. its a joint probability distribution on pairs $(x, y)$ where $x$ comes from the source and $y$ from the target.
@@ -82,10 +82,10 @@ here
 - the constraints $\pi \in \Pi(\mu, \nu)$ say that $\pi$ must have the right marginals: $\int_y d\pi(x,y) = d\mu(x)$ and $\int_x d\pi(x,y) = d\nu(y)$.
   - first says: all the mass that leaves $x$ totals exactly what $\mu$ has at $x$
   - second says: the total mass arriving at $y$ is exactly what $\nu$ needs there.
-- $|x - y|^2$ is the cost of moving a unit of mass from $x$ to $y$.
-- so $\int |x-y|^2 d\pi(x,y)$ is the total cost of the transport plan $\pi$: add up cost times mass for every pair. the infimum over all valid $\pi$ picks the cheapest possible transport plan.
+- $\lvert x - y\rvert^2$ is the cost of moving a unit of mass from $x$ to $y$.
+- so $\int \lvert x-y\rvert^2 d\pi(x,y)$ is the total cost of the transport plan $\pi$: add up cost times mass for every pair. the infimum over all valid $\pi$ picks the cheapest possible transport plan.
 
-for the above dirac delta example, $W_2^2(\delta_0, \delta_\varepsilon)$ asks whats the cheapest way to move all the mass from 0 to $\varepsilon$? the only valid coupling is $\pi = \delta_{(0,\varepsilon)}$, that is, move everything from 0 to $\varepsilon$.  the cost is $|0 - \varepsilon|^2 = \varepsilon^2$. so $W_2(\delta_0, \delta_\varepsilon) = \varepsilon$ and as $\varepsilon \to 0$, the distance goes to zero.
+for the above dirac delta example, $W_2^2(\delta_0, \delta_\varepsilon)$ asks whats the cheapest way to move all the mass from 0 to $\varepsilon$? the only valid coupling is $\pi = \delta_{(0,\varepsilon)}$, that is, move everything from 0 to $\varepsilon$.  the cost is $\lvert 0 - \varepsilon\rvert^2 = \varepsilon^2$. so $W_2(\delta_0, \delta_\varepsilon) = \varepsilon$ and as $\varepsilon \to 0$, the distance goes to zero.
 
 ---
 ### how does the optimal plan look like?
@@ -98,7 +98,7 @@ $$\pi = (\text{id}, T)_{\#}\mu, \qquad T = \nabla\psi$$
 
 the map $T$ sends each point $x$ to exactly one point $T(x)$. every grain of sand at location $x$ goes to location $T(x)$ without splitting.
 
-the total cost is $\int |x - T(x)|^2 d\mu(x)$, which is just the sum up squared distances traveled, weighted by mass.
+the total cost is $\int \lvert x - T(x)\rvert^2 d\mu(x)$, which is just the sum up squared distances traveled, weighted by mass.
 
 the interesting part is that $T$ must be a gradient of a convex function.
 
@@ -125,13 +125,13 @@ its like a pressure field that drives the motion. particles move from regions of
 
 now we have a distance $W_2(\mu, \nu)$ between two distributions. but for a gradient flow, we need to talk about curves of distributions and their speed.
 
-in riemannian geometry, the length of a curve $\gamma(t)$ from time 0 to time 1 is $\int_0^1 |\dot{\gamma}(t)| dt$, and the distance between two points is the length of the shortest curve connecting them.
+in riemannian geometry, the length of a curve $\gamma(t)$ from time 0 to time 1 is $\int_0^1 \lvert\dot{\gamma}(t)\rvert dt$, and the distance between two points is the length of the shortest curve connecting them.
 
 we need something analogous to this for wasserstein.
 
 the benamou-brenier formula says
 
-$$W_2^2(\mu_0, \mu_1) = \inf_{(\mu_t, v_t)} \int_0^1 \int_{\mathbb{R}^n} |v_t(x)|^2 , d\mu_t(x) , dt$$
+$$W_2^2(\mu_0, \mu_1) = \inf_{(\mu_t, v_t)} \int_0^1 \int_{\mathbb{R}^n} \lvert v_t(x)\rvert^2 , d\mu_t(x) , dt$$
 
 where the infimum is over all pairs $(\mu_t, v_t)$ satisfying the continuity equation:
 
@@ -148,7 +148,7 @@ here,
   - the divergence measures how much is spreading out versus converging.
   - the equation says these two cancel meaning density increases exactly when flux converges, decreases when flux diverges.
 
-the quantity $\int |v_t(x)|^2 d\mu_t(x)$ is the instantaneous kinetic energy of the entire distribution at time $t$. it implies fast particles or many particles moving at once both contribute more energy.
+the quantity $\int \lvert v_t(x)\rvert^2 d\mu_t(x)$ is the instantaneous kinetic energy of the entire distribution at time $t$. it implies fast particles or many particles moving at once both contribute more energy.
 
 the formula says that the squared wasserstein distance equals the minimum total kinetic energy accumulated over all mass-conserving flows from $\mu_0$ to $\mu_1$. sending $\mu_0$ to $\mu_1$ cheaply means finding a flow that uses as little kinetic energy as possible.
 
@@ -180,11 +180,11 @@ why are tangent vectors gradient fields?
 
 a tangent vector at $\mu$ should be the velocity of some curve of distributions passing through $\mu$ at time 0.
 
-so if $\mu_t$ is such a curve, its velocity is $\partial_t \mu_t |_{t=0}$, which is some signed measure (it tells you where mass is being added and where its being removed).
+so if $\mu_t$ is such a curve, its velocity is $\partial_t \mu_t \rvert_{t=0}$, which is some signed measure (it tells you where mass is being added and where its being removed).
 
 then the continuity equation says $\partial_t \mu_t = -\text{div}(v_t \mu_t)$, so every velocity of a distribution curve corresponds to some velocity field $v_t$.
 
-now, (imp) for any velocity field $v_t$, the kinetic energy $\int |v_t|^2 d\mu_t$ is minimised when $v_t$ is curl-free, i.e, when $v_t = \nabla\phi_t$ for some scalar potential $\phi_t$.
+now, (imp) for any velocity field $v_t$, the kinetic energy $\int \lvert v_t\rvert^2 d\mu_t$ is minimised when $v_t$ is curl-free, i.e, when $v_t = \nabla\phi_t$ for some scalar potential $\phi_t$.
 
 the rotational part of $v_t$ contributes kinetic energy but doesnt move the distribution (swirling doesnt translate mass).
 
@@ -196,9 +196,9 @@ for  mass transport purposes, circulation wastes energy without doing useful wor
 
 but why is the metric $g_\mu(\nabla\phi, \nabla\psi) = \int \nabla\phi \cdot \nabla\psi , d\mu$?
 
-from the B-B formula, squared speed of the curve $\mu_t$ at time $t$ must equal $\frac{d}{ds}^2 W_2^2(\mu_t, \mu_{t+s})|_{s=0}$  (infinitesimal kinetic energy).
+from the B-B formula, squared speed of the curve $\mu_t$ at time $t$ must equal $\frac{d}{ds}^2 W_2^2(\mu_t, \mu_{t+s})\rvert_{s=0}$  (infinitesimal kinetic energy).
 
-but the formula  says the kinetic energy of a curve with velocity field $v_t = \nabla\phi_t$ is $\int |v_t|^2 d\mu_t = \int |\nabla\phi_t|^2 d\mu_t$.
+but the formula  says the kinetic energy of a curve with velocity field $v_t = \nabla\phi_t$ is $\int \lvert v_t\rvert^2 d\mu_t = \int \lvert\nabla\phi_t\rvert^2 d\mu_t$.
 
 this is exactly the squared norm $g_\mu(\nabla\phi, \nabla\phi)$ under the metric above.
 
@@ -473,13 +473,13 @@ this is implicit because $x_{k+1}$ appears on both sides.
 
 solving it is eq to:
 
-$$x_{k+1} = \underset{x}{\arg\min}; f(x) + \frac{1}{2\tau}|x - x_k|^2$$
+$$x_{k+1} = \underset{x}{\arg\min}; f(x) + \frac{1}{2\tau}\lvert x - x_k\rvert^2$$
 
-in this ot we want to decrease $f(x)$, but we dont wanna move v far from $x_k$ (the penalty $|x-x_k|^2/2\tau$).
+in this ot we want to decrease $f(x)$, but we dont wanna move v far from $x_k$ (the penalty $\lvert x-x_k\rvert^2/2\tau$).
 
 the parameter $\tau$ controls the tradeoff: large $\tau$ means the penalty is weak, you can take big steps; small $\tau$ means you can only move a little.
 
-we replace $x \in \mathbb{R}^n$ with $\mu \in \mathcal{P}_2(\mathbb{R}^n)$, replace $f$ with $\mathcal{F}$, and replace $|x-x_k|^2$ with $W_2^2(\mu, \mu_k)$:
+we replace $x \in \mathbb{R}^n$ with $\mu \in \mathcal{P}_2(\mathbb{R}^n)$, replace $f$ with $\mathcal{F}$, and replace $\lvert x-x_k\rvert^2$ with $W_2^2(\mu, \mu_k)$:
 
 $$\mu_{k+1} = \underset{\mu \in \mathcal{P}_2}{\arg\min}; \mathcal{F}[\mu] + \frac{1}{2\tau}W_2^2(\mu, \mu_k)$$
 
@@ -515,7 +515,7 @@ the variation of $W_2^2(\mu, \mu_k)$ with respect to $\mu$ at the minimiser is t
 
 the optimality condition is:
 
-$$\frac{\delta\mathcal{F}}{\delta\mu}\bigg|_{\mu_{k+1}} - \frac{\phi}{\tau} = \text{constant on supp}(\mu_{k+1})$$
+$$\frac{\delta\mathcal{F}}{\delta\mu}\bigg\rvert_{\mu_{k+1}} - \frac{\phi}{\tau} = \text{constant on supp}(\mu_{k+1})$$
 
 where $\nabla\phi$ is the optimal transport map from $\mu_{k+1}$ to $\mu_k$ (by Brenier, $\nabla\phi$ pushes $\mu_{k+1}$ forward to $\mu_k$).
 
