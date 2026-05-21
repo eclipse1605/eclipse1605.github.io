@@ -21,16 +21,16 @@ Overall, this served as a useful first sanity check. The experiment suggests tha
 
 ## Results
 
-![Histogram comparison](../imgs/3/histogram.png)
+![Histogram comparison](/imgs/3/histogram.png)
 
-![Scatter plot comparison](../imgs/3/scatterplot.png)
+![Scatter plot comparison](/imgs/3/scatterplot.png)
 
-![Data vs PrO](../imgs/3/data-vs-prop.png)
+![Data vs PrO](/imgs/3/data-vs-prop.png)
 
-![Posterior predictive marginals](../imgs/3/posterior-predictive.png)
+![Posterior predictive marginals](/imgs/3/posterior-predictive.png)
 
-![Posterior predictive statistics](../imgs/3/posterior-predictive-fit.png)
+![Posterior predictive statistics](/imgs/3/posterior-predictive-fit.png)
 
-![Particle trajectories](../imgs/3/trajectories.png)
+![Particle trajectories](/imgs/3/trajectories.png)
 
-![Diagnostics](../imgs/3/diagnostics.png)
+![Diagnostics](/imgs/3/diagnostics.png)

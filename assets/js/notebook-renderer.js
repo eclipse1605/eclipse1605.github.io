@@ -45,6 +45,21 @@
     return "";
   };
 
+  const renderMath = (element) => {
+    if (window.renderMathInElement) {
+      renderMathInElement(element, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "$", right: "$", display: false },
+          { left: "\\(", right: "\\)", display: false },
+          { left: "\\[", right: "\\]", display: true }
+        ],
+        throwOnError: false,
+        ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+      });
+    }
+  };
+
   const renderCell = (cell) => {
     if (cell.cell_type === "markdown") {
       const source = (cell.source || []).join("");
@@ -56,7 +71,7 @@
       const outputs = (cell.outputs || []).map(renderOutput).join("");
       return `
         <div class="nb-cell nb-code">
-          <pre class="nb-source">${source}</pre>
+          <pre class="nb-source"><code>${source}</code></pre>
           ${outputs}
         </div>
       `;
@@ -78,9 +93,7 @@
         return;
       }
       container.innerHTML = cells.map(renderCell).join("");
-      if (window.MathJax && window.MathJax.typesetPromise) {
-        window.MathJax.typesetPromise([container]);
-      }
+      renderMath(container);
     })
     .catch((err) => {
       container.textContent = err.message || "Failed to render notebook.";

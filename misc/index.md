@@ -10,8 +10,8 @@ math: true
     <p>A place for notes, notebooks, and documents that I reference in posts.</p>
   </div>
   <div class="misc-grid">
-    {% assign misc_md = site.pages | where_exp: "p", "p.dir == '/misc/'" | where_exp: "p", "p.url != '/misc/'" | where_exp: "p", "p.misc_type == 'markdown'" %}
-    {% assign misc_pages = site.pages | where_exp: "p", "p.dir == '/misc/'" | where_exp: "p", "p.url != '/misc/'" %}
+    {% assign misc_pages = site.pages | where: "layout", "misc" %}
+    {% assign misc_md = misc_pages | where: "misc_type", "markdown" %}
     {% for item in misc_md %}
       <div class="about-card">
         <span class="tag">Markdown</span>
@@ -26,7 +26,7 @@ math: true
     {% endfor %}
 
     {% for page in misc_pages %}
-      {% unless page.misc_type == "markdown" or page.url == '/misc/' %}
+      {% unless page.url == '/misc/' or page.misc_type == 'markdown' %}
         <div class="about-card">
           {% if page.misc_type == 'pdf' %}
             <span class="tag">PDF</span>

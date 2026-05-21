@@ -17,11 +17,11 @@ title: Home
 <section id="about" class="section">
   <div class="section-header">
     <h2>About Me</h2>
-    <p>I am a final year B.Tech CSE student at IIIT Gwalior, currently working on PrO posteriors and Wasserstein gradient flows for GSoC 2026.</p>
+    <p>I am a final year B.Tech CSE student at IIIT Gwalior, currently working on PrO posteriors for GSoC 2026 under NumFOCUS (PyMC).</p>
   </div>
   <div class="about-grid">
     <div class="about-card about-profile">
-      <img class="about-photo" src="{{ '/imgs/misc/my%20photo.jpeg' | relative_url }}" alt="Advay Bhagwat">
+      <img class="about-photo" src="{{ '/imgs/misc/my%20photo.jpeg' | absolute_url }}" alt="Advay Bhagwat">
       <div class="about-meta">
         <h3>Advay Bhagwat</h3>
         <ul class="info-list">
@@ -45,7 +45,7 @@ title: Home
       </div>
     </div>
     <div class="about-card about-story">
-      <p>I am a final year B.Tech student in Computer Science and Engineering at IIIT Gwalior. I am currently working on Predictively Oriented (PrO) posteriors in PyMC as a GSoC 2026 contributor, with a focus on Wasserstein gradient flows and particle-based inference.</p>
+      <p>I am a final year B.Tech student in Computer Science and Engineering at IIIT Gwalior. I am a GSoC 2026 contributor with NumFOCUS (PyMC), working on Predictively Oriented (PrO) posteriors.</p>
       <p>My broader interests are machine learning and deep learning, especially probabilistic modeling, optimization, and the dynamics of inference algorithms. I also enjoy competitive programming, which keeps me sharp on algorithmic thinking and implementation under constraints.</p>
       <p>This blog is my running log of experiments, derivations, and implementation decisions. I aim to write posts that are technically precise but still readable for others who want to learn or replicate the work.</p>
     </div>
