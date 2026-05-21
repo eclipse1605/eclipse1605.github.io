@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "PrO posteriors and the first goal"
-date: 2026-05-07
+date: 2026-05-15
 summary: "Why we chose PrO posteriors as the starting milestone."
 ---
 

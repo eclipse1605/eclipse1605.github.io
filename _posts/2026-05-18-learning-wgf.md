@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "Learning WGF"
-date: 2026-05-18
+date: 2026-05-22
 summary: "Key steps that take the PrO objective to a working particle sampler."
 ---
 

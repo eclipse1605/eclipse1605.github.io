@@ -1,7 +1,7 @@
 ---
 layout: post
 title: "The first notebook I made"
-date: 2026-05-12
+date: 2026-05-17
 summary: "A quick recap of the first working notebook and what it showed."
 ---
 
