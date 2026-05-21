@@ -1,0 +1,20 @@
+---
+layout: default
+---
+
+<article class="post">
+  <header class="post-header fade-in">
+    <p class="eyebrow">GSoC Blog</p>
+    <h1>{{ page.title }}</h1>
+    <p class="post-meta">{{ page.date | date: "%B %d, %Y" }}</p>
+    {% if page.summary %}
+      <p class="lead">{{ page.summary }}</p>
+    {% endif %}
+  </header>
+  <div class="post-content content">
+    {{ content }}
+  </div>
+  <footer class="post-footer">
+    <a class="text-link" href="{{ '/' | relative_url }}#blogs">Back to all posts -></a>
+  </footer>
+</article>

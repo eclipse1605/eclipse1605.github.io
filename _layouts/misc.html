@@ -1,0 +1,40 @@
+---
+layout: default
+---
+
+<article class="post">
+  <header class="post-header fade-in">
+    <p class="eyebrow">Misc</p>
+    <h1>{{ page.title }}</h1>
+    {% if page.summary %}
+      <p class="lead">{{ page.summary }}</p>
+    {% endif %}
+  </header>
+  <div class="post-content content">
+    {{ content }}
+
+    {% if page.misc_type == "pdf" and page.source %}
+      <div class="misc-actions">
+        <a class="btn" href="{{ page.source | relative_url }}">Download PDF</a>
+      </div>
+      <iframe class="misc-frame" title="{{ page.title }}" src="{{ page.source | relative_url }}"></iframe>
+      <p class="misc-note">If PDF rendering is blocked by the browser, use the direct link above.</p>
+    {% endif %}
+
+    {% if page.misc_type == "notebook" and page.source %}
+      <div class="misc-actions">
+        <a class="btn" href="{{ page.source | relative_url }}">Download notebook</a>
+      </div>
+      <div id="notebook-viewer" class="nb-container" data-src="{{ page.source | relative_url }}"></div>
+      <p class="misc-note">Rendered client-side from the .ipynb file.</p>
+    {% endif %}
+  </div>
+  <footer class="post-footer">
+    <a class="text-link" href="{{ '/misc/' | relative_url }}">Back to misc -></a>
+  </footer>
+</article>
+
+{% if page.misc_type == "notebook" %}
+  <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script defer src="{{ '/assets/js/notebook-renderer.js' | relative_url }}"></script>
+{% endif %}
