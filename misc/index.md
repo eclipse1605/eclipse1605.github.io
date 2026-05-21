@@ -19,9 +19,8 @@ math: true
         <p>{{ item.summary | default: "Rendered from Markdown." }}</p>
         <div class="misc-actions">
           <a class="btn" href="{{ item.url | relative_url }}">Open</a>
-          <a class="btn ghost" href="{{ item.path | relative_url }}">Raw file</a>
         </div>
-        <p class="misc-note">Rendered pages support LaTeX via MathJax.</p>
+        <p class="misc-note">Rendered pages support LaTeX via KaTeX.</p>
       </div>
     {% endfor %}
 
@@ -66,9 +65,6 @@ math: true
     {% for page in misc_pages %}
       {% unless page.url == '/misc/' %}
         <a href="{{ page.url | relative_url }}">{{ page.title }}</a>
-        {% if page.source %}
-          <a href="{{ page.source | relative_url }}">{{ page.title }} (source)</a>
-        {% endif %}
       {% endunless %}
     {% endfor %}
   </div>

@@ -13,17 +13,37 @@
     <meta name="description" content="{{ page.summary | default: site.description }}">
     <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+    <script>
+      (() => {
+        const storageKey = "theme-preference";
+        const prefersDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        let storedTheme = null;
+        try {
+          storedTheme = window.localStorage ? localStorage.getItem(storageKey) : null;
+        } catch (error) {
+          storedTheme = null;
+        }
+        const theme = storedTheme || (prefersDark ? "dark" : "light");
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.style.colorScheme = theme;
+      })();
+    </script>
   </head>
   <body>
     <div class="page-bg" aria-hidden="true"></div>
     <header class="site-header">
       <div class="container header-inner">
         <a class="brand" href="{{ '/' | relative_url }}">{{ site.title }}</a>
-        <nav class="site-nav">
-          <a href="{{ '/' | relative_url }}#about">About</a>
-          <a href="{{ '/' | relative_url }}#blogs">Blogs</a>
-          <a href="{{ '/misc/' | relative_url }}">Misc</a>
-        </nav>
+        <div class="header-actions">
+          <nav class="site-nav">
+            <a href="{{ '/' | relative_url }}#about">About</a>
+            <a href="{{ '/' | relative_url }}#blogs">Blogs</a>
+            <a href="{{ '/misc/' | relative_url }}">Misc</a>
+          </nav>
+          <button class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">Theme</button>
+        </div>
       </div>
     </header>
     <main class="site-main container">
@@ -35,10 +55,36 @@
         <span>Built for GSoC.</span>
       </div>
     </footer>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
     <script>
       document.addEventListener("DOMContentLoaded", () => {
+        const storageKey = "theme-preference";
+        const toggle = document.querySelector(".theme-toggle");
+        const root = document.documentElement;
+
+        const syncToggle = () => {
+          const isDark = root.dataset.theme === "dark";
+          if (toggle) {
+            toggle.setAttribute("aria-pressed", String(isDark));
+            toggle.textContent = isDark ? "Light" : "Dark";
+          }
+        };
+
+        if (toggle) {
+          toggle.addEventListener("click", () => {
+            const nextTheme = root.dataset.theme === "dark" ? "light" : "dark";
+            root.dataset.theme = nextTheme;
+            root.style.colorScheme = nextTheme;
+            try {
+              localStorage.setItem(storageKey, nextTheme);
+            } catch (error) {
+              // Ignore storage failures and keep the live theme change.
+            }
+            syncToggle();
+          });
+        }
+
+        syncToggle();
+
         if (window.renderMathInElement) {
           renderMathInElement(document.body, {
             delimiters: [

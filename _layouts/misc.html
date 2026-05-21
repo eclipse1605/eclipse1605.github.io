@@ -36,5 +36,6 @@ layout: default
 
 {% if page.misc_type == "notebook" %}
   <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/highlight.js@11.9.0/lib/common.min.js"></script>
   <script defer src="{{ '/assets/js/notebook-renderer.js' | relative_url }}"></script>
 {% endif %}

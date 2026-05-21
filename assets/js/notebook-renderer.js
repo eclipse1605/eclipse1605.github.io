@@ -71,7 +71,7 @@
       const outputs = (cell.outputs || []).map(renderOutput).join("");
       return `
         <div class="nb-cell nb-code">
-          <pre class="nb-source"><code>${source}</code></pre>
+          <pre class="nb-source"><code class="language-python">${source}</code></pre>
           ${outputs}
         </div>
       `;
@@ -93,6 +93,11 @@
         return;
       }
       container.innerHTML = cells.map(renderCell).join("");
+      if (window.hljs) {
+        container.querySelectorAll("pre.nb-source code").forEach((block) => {
+          hljs.highlightElement(block);
+        });
+      }
       renderMath(container);
     })
     .catch((err) => {
