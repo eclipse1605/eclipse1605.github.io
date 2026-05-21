@@ -18,7 +18,6 @@ layout: default
         <a class="btn" href="{{ page.source | relative_url }}">Download PDF</a>
       </div>
       <iframe class="misc-frame" title="{{ page.title }}" src="{{ page.source | relative_url }}"></iframe>
-      <p class="misc-note">If PDF rendering is blocked by the browser, use the direct link above.</p>
     {% endif %}
 
     {% if page.misc_type == "notebook" and page.source %}
@@ -26,7 +25,6 @@ layout: default
         <a class="btn" href="{{ page.source | relative_url }}">Download notebook</a>
       </div>
       <div id="notebook-viewer" class="nb-container" data-src="{{ page.source | relative_url }}"></div>
-      <p class="misc-note">Rendered client-side from the .ipynb file.</p>
     {% endif %}
   </div>
   <footer class="post-footer">

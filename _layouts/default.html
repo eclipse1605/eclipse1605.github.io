@@ -27,7 +27,8 @@
         } catch (error) {
           storedTheme = null;
         }
-        const theme = storedTheme || (prefersDark ? "dark" : "light");
+        // Default to dark if the user hasn't explicitly chosen a theme
+        const theme = storedTheme || "dark";
         document.documentElement.dataset.theme = theme;
         document.documentElement.style.colorScheme = theme;
         // Ensure HLJS stylesheet matches the initial theme

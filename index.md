@@ -57,7 +57,7 @@ title: Home
     <h2>Blogs</h2>
   </div>
   <div class="post-list stagger">
-    {% for post in site.posts %}
+    {% for post in site.posts limit:3 %}
       <article class="post-card" style="--stagger: {{ forloop.index }};">
         <p class="post-date">{{ post.date | date: "%B %d, %Y" }}</p>
         <h3><a href="{{ post.url | relative_url }}">{{ post.title }}</a></h3>
@@ -67,5 +67,29 @@ title: Home
         <a class="text-link" href="{{ post.url | relative_url }}">Read post -></a>
       </article>
     {% endfor %}
+    <div class="text-link"><a href="{{ '/blogs/' | relative_url }}">See all posts →</a></div>
+  </div>
+</section>
+
+<section id="latest-misc" class="section">
+  <div class="section-header">
+    <h2>Latest Misc</h2>
+  </div>
+  <div class="misc-list-stacked">
+    {% assign misc_pages = site.pages | where: "layout", "misc" %}
+    {% assign misc_sorted = misc_pages | sort: 'date' | reverse %}
+    {% for item in misc_sorted limit:3 %}
+      <div class="about-card">
+        {% if item.misc_type %}
+          <span class="tag">{{ item.misc_type | capitalize }}</span>
+        {% endif %}
+        <h3><a href="{{ item.url | relative_url }}">{{ item.title }}</a></h3>
+        <p>{{ item.summary | default: item.excerpt | default: "" }}</p>
+        <div class="misc-actions">
+          <a class="btn" href="{{ item.url | relative_url }}">Open</a>
+        </div>
+      </div>
+    {% endfor %}
+    <div class="text-link"><a href="{{ '/misc/' | relative_url }}">See all misc →</a></div>
   </div>
 </section>

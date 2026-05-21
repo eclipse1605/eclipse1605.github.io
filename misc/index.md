@@ -10,45 +10,21 @@ math: true
     <p>A place for notes, notebooks, and documents that I reference in posts.</p>
   </div>
   <div class="misc-grid">
-    {% assign misc_pages = site.pages | where: "layout", "misc" %}
-    {% assign misc_md = misc_pages | where: "misc_type", "markdown" %}
-    {% for item in misc_md %}
-      <div class="about-card">
-        <span class="tag">Markdown</span>
-        <h3>{{ item.title }}</h3>
-        <p>{{ item.summary | default: "Rendered from Markdown." }}</p>
-        <div class="misc-actions">
-          <a class="btn" href="{{ item.url | relative_url }}">Open</a>
-        </div>
-      </div>
-    {% endfor %}
-
+    {% assign misc_pages = site.pages | where: "layout", "misc" | sort: 'date' | reverse %}
     {% for page in misc_pages %}
-      {% unless page.url == '/misc/' or page.misc_type == 'markdown' %}
+      {% unless page.url == '/misc/' %}
         <div class="about-card">
-          {% if page.misc_type == 'pdf' %}
-            <span class="tag">PDF</span>
-            <h3>{{ page.title }}</h3>
-            <p>Rendered inline on the PDF page, with a direct download link.</p>
-            <div class="misc-actions">
-              <a class="btn" href="{{ page.url | relative_url }}">Open</a>
-              {% if page.source %}
-                <a class="btn ghost" href="{{ page.source | relative_url }}">Download</a>
-              {% endif %}
-            </div>
-            <p class="misc-note">If PDF rendering is blocked by the browser, use the direct link.</p>
-          {% elsif page.misc_type == 'notebook' %}
-            <span class="tag">Notebook</span>
-            <h3>{{ page.title }}</h3>
-            <p>Rendered inline on the notebook page, with download link.</p>
-            <div class="misc-actions">
-              <a class="btn" href="{{ page.url | relative_url }}">Open</a>
-              {% if page.source %}
-                <a class="btn ghost" href="{{ page.source | relative_url }}">Download</a>
-              {% endif %}
-            </div>
-            <p class="misc-note">Notebook rendering happens client-side.</p>
+          {% if page.misc_type %}
+            <span class="tag">{{ page.misc_type | capitalize }}</span>
           {% endif %}
+          <h3><a href="{{ page.url | relative_url }}">{{ page.title }}</a></h3>
+          <p>{{ page.summary | default: page.excerpt | default: "" }}</p>
+          <div class="misc-actions">
+            <a class="btn" href="{{ page.url | relative_url }}">Open</a>
+            {% if page.source %}
+              <a class="btn ghost" href="{{ page.source | relative_url }}">Download</a>
+            {% endif %}
+          </div>
         </div>
       {% endunless %}
     {% endfor %}
