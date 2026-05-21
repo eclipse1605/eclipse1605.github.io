@@ -7,7 +7,7 @@ title: Blogs
   <div class="section-header">
     <h2>Blogs</h2>
   </div>
-  <div class="blogs-list">
+  <div class="vertical-card-list">
     {% for post in site.posts %}
       <article class="post-card">
         <p class="post-date">{{ post.date | date: "%B %d, %Y" }}</p>

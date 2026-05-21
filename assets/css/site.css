@@ -364,6 +364,11 @@ pre code, pre code.hljs, pre.hljs {
   gap: 20px;
 }
 
+.vertical-card-list {
+  display: grid;
+  gap: 16px;
+}
+
 .misc-list {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));

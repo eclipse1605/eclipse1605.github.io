@@ -9,11 +9,11 @@ math: true
     <h2>Misc</h2>
     <p>A place for notes, notebooks, and documents that I reference in posts.</p>
   </div>
-  <div class="misc-grid">
+  <div class="vertical-card-list">
     {% assign misc_pages = site.pages | where: "layout", "misc" | sort: 'date' | reverse %}
     {% for page in misc_pages %}
       {% unless page.url == '/misc/' %}
-        <div class="about-card post-card">
+        <article class="post-card">
           {% if page.misc_type %}
             <span class="tag">{{ page.misc_type | capitalize }}</span>
           {% endif %}
@@ -25,7 +25,7 @@ math: true
               <a class="btn ghost" href="{{ page.source | relative_url }}">Download</a>
             {% endif %}
           </div>
-        </div>
+        </article>
       {% endunless %}
     {% endfor %}
   </div>

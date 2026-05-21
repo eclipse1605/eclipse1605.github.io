@@ -54,7 +54,7 @@ title: Home
 
 <section id="blogs" class="section">
   <div class="section-header">
-    <h2>Blogs</h2>
+    <h2>Latest Blogs</h2>
   </div>
   <div class="post-list stagger">
     {% for post in site.posts limit:3 %}
@@ -75,11 +75,11 @@ title: Home
   <div class="section-header">
     <h2>Latest Misc</h2>
   </div>
-  <div class="misc-list-stacked">
+  <div class="post-list stagger">
     {% assign misc_pages = site.pages | where: "layout", "misc" %}
     {% assign misc_sorted = misc_pages | sort: 'date' | reverse %}
     {% for item in misc_sorted limit:3 %}
-      <div class="about-card post-card">
+      <article class="post-card" style="--stagger: {{ forloop.index }};">
         {% if item.misc_type %}
           <span class="tag">{{ item.misc_type | capitalize }}</span>
         {% endif %}
@@ -88,7 +88,7 @@ title: Home
         <div class="misc-actions">
           <a class="btn" href="{{ item.url | relative_url }}">Open</a>
         </div>
-      </div>
+      </article>
     {% endfor %}
     <div class="text-link"><a href="{{ '/misc/' | relative_url }}">See all misc →</a></div>
   </div>
