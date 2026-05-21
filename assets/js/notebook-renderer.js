@@ -55,6 +55,9 @@
           { left: "\\[", right: "\\]", display: true }
         ],
         throwOnError: false,
+        strict: "ignore",
+        processEscapes: true,
+        ignoredClasses: ["katex"],
         ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"]
       });
     }

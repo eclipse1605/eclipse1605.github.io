@@ -79,6 +79,8 @@ a.text-link,
 
 .brand,
 .btn,
+.site-main a.btn,
+.site-main a.btn.ghost,
 .site-nav a,
 .misc-nav a,
 .post-card h3 a {
