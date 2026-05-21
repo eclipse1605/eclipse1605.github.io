@@ -181,6 +181,30 @@ img {
   gap: 24px;
 }
 
+.about-profile {
+  display: grid;
+  gap: 16px;
+  align-content: start;
+}
+
+.about-photo {
+  width: 100%;
+  max-width: 240px;
+  border-radius: 18px;
+  border: 1px solid rgba(31, 26, 43, 0.08);
+}
+
+.about-meta h3 {
+  margin: 0 0 8px;
+  font-family: "Fraunces", serif;
+  font-size: 1.4rem;
+}
+
+.about-story p {
+  margin: 0 0 16px;
+  color: var(--muted);
+}
+
 .about-card {
   background: var(--card);
   border: 1px solid var(--border);

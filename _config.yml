@@ -2,7 +2,7 @@ title: Advay Bhagwat - GSoC Blog
 description: Notes, experiments, and reflections from Google Summer of Code.
 author: Advay Bhagwat
 url: "https://eclipse1605.github.io"
-baseurl: "/gsoc-blogs"
+baseurl: ""
 markdown: kramdown
 permalink: /blog/:title/
 exclude:
