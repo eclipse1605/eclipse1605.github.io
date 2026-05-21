@@ -18,6 +18,85 @@
       .replace(/\"/g, "&quot;")
       .replace(/'/g, "&#39;");
 
+  const normalizeText = (value) => (Array.isArray(value) ? value.join("") : String(value || ""));
+
+  const protectMath = (source) => {
+    const math = [];
+    let protectedSource = "";
+    let index = 0;
+
+    const isEscaped = (position) => {
+      let slashCount = 0;
+      for (let cursor = position - 1; cursor >= 0 && source[cursor] === "\\"; cursor -= 1) {
+        slashCount += 1;
+      }
+      return slashCount % 2 === 1;
+    };
+
+    const store = (value) => {
+      const token = `@@NOTEBOOKMATH${math.length}@@`;
+      math.push(value);
+      return token;
+    };
+
+    while (index < source.length) {
+      const escaped = isEscaped(index);
+      const displayDelimiter = !escaped && source.startsWith("$$", index) ? "$$" : null;
+      const bracketDelimiter = !escaped && source.startsWith("\\[", index) ? "\\[" : null;
+      const parenDelimiter = !escaped && source.startsWith("\\(", index) ? "\\(" : null;
+      const inlineDelimiter =
+        !escaped && source[index] === "$" && !source.startsWith("$$", index) ? "$" : null;
+      const left = displayDelimiter || bracketDelimiter || parenDelimiter || inlineDelimiter;
+
+      if (!left) {
+        protectedSource += source[index];
+        index += 1;
+        continue;
+      }
+
+      const right = left === "\\[" ? "\\]" : left === "\\(" ? "\\)" : left;
+      let cursor = index + left.length;
+      let end = -1;
+
+      while (cursor < source.length) {
+        if (source[cursor] === "\\") {
+          cursor += 2;
+          continue;
+        }
+        if (source.startsWith(right, cursor)) {
+          end = cursor;
+          break;
+        }
+        cursor += 1;
+      }
+
+      if (end === -1) {
+        protectedSource += source[index];
+        index += 1;
+        continue;
+      }
+
+      const value = source.slice(index, end + right.length);
+      protectedSource += store(value);
+      index = end + right.length;
+    }
+
+    return { protectedSource, math };
+  };
+
+  const restoreMath = (html, math) =>
+    math.reduce(
+      (result, value, index) =>
+        result.replaceAll(`@@NOTEBOOKMATH${index}@@`, escapeHtml(value)),
+      html
+    );
+
+  const renderMarkdown = (source) => {
+    const { protectedSource, math } = protectMath(normalizeText(source));
+    const html = window.marked ? marked.parse(protectedSource) : escapeHtml(protectedSource);
+    return restoreMath(html, math);
+  };
+
   const renderOutput = (output) => {
     if (!output) return "";
     if (output.output_type === "stream") {
@@ -32,8 +111,8 @@
       if (data["text/html"]) {
         return `<div class="nb-output">${data["text/html"]}</div>`;
       }
-      if (data["text/markdown"] && window.marked) {
-        return `<div class="nb-output">${marked.parse(data["text/markdown"])} </div>`;
+      if (data["text/markdown"]) {
+        return `<div class="nb-output">${renderMarkdown(data["text/markdown"])} </div>`;
       }
       if (data["image/png"]) {
         return `<img class="nb-image" alt="Notebook output" src="data:image/png;base64,${data["image/png"]}">`;
@@ -83,7 +162,7 @@
   const renderCell = (cell) => {
     if (cell.cell_type === "markdown") {
       const source = (cell.source || []).join("");
-      const html = window.marked ? marked.parse(source) : escapeHtml(source);
+      const html = renderMarkdown(source);
       return `<div class="nb-cell nb-markdown">${html}</div>`;
     }
     if (cell.cell_type === "code") {
