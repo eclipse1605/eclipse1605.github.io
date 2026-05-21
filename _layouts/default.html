@@ -12,9 +12,11 @@
     </title>
     <meta name="description" content="{{ page.summary | default: site.description }}">
     <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
+    <link id="hljs-style" rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
     <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+    <script defer src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
     <script>
       (() => {
         const storageKey = "theme-preference";
@@ -28,6 +30,17 @@
         const theme = storedTheme || (prefersDark ? "dark" : "light");
         document.documentElement.dataset.theme = theme;
         document.documentElement.style.colorScheme = theme;
+        // Ensure HLJS stylesheet matches the initial theme
+        try {
+          const hljsLink = document.getElementById('hljs-style');
+          if (hljsLink) {
+            hljsLink.href = theme === 'dark'
+              ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css'
+              : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css';
+          }
+        } catch (e) {
+          // ignore
+        }
       })();
     </script>
   </head>
@@ -42,7 +55,7 @@
             <a href="{{ '/' | relative_url }}#blogs">Blogs</a>
             <a href="{{ '/misc/' | relative_url }}">Misc</a>
           </nav>
-          <button class="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false">Theme</button>
+          <button class="theme-toggle" id="theme-toggle" type="button" aria-label="Toggle dark mode" aria-pressed="false"><span class="theme-icon">🌞</span></button>
         </div>
       </div>
     </header>
@@ -56,16 +69,43 @@
       </div>
     </footer>
     <script>
+      // small helper: wait for a global to exist, then call callback (bounded attempts)
+      const waitForGlobal = (testFn, cb, attempts = 20, interval = 150) => {
+        let tries = 0;
+        const id = setInterval(() => {
+          try {
+            if (testFn()) {
+              clearInterval(id);
+              cb();
+              return;
+            }
+          } catch (e) {
+            // ignore and retry
+          }
+          if (++tries >= attempts) clearInterval(id);
+        }, interval);
+      };
+
       document.addEventListener("DOMContentLoaded", () => {
         const storageKey = "theme-preference";
         const toggle = document.querySelector(".theme-toggle");
         const root = document.documentElement;
 
+        const setHljsTheme = (theme) => {
+          const hljsLink = document.getElementById('hljs-style');
+          if (hljsLink) {
+            hljsLink.href = theme === 'dark'
+              ? 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github-dark.min.css'
+              : 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css';
+          }
+        };
+
         const syncToggle = () => {
           const isDark = root.dataset.theme === "dark";
           if (toggle) {
             toggle.setAttribute("aria-pressed", String(isDark));
-            toggle.textContent = isDark ? "Light" : "Dark";
+            const icon = toggle.querySelector('.theme-icon');
+            if (icon) icon.textContent = isDark ? '🌜' : '🌞';
           }
         };
 
@@ -77,7 +117,12 @@
             try {
               localStorage.setItem(storageKey, nextTheme);
             } catch (error) {
-              // Ignore storage failures and keep the live theme change.
+              // ignore
+            }
+            setHljsTheme(nextTheme);
+            // re-run hljs to repaint tokens if available
+            if (window.hljs && typeof hljs.highlightAll === 'function') {
+              hljs.highlightAll();
             }
             syncToggle();
           });
@@ -85,18 +130,30 @@
 
         syncToggle();
 
-        if (window.renderMathInElement) {
-          renderMathInElement(document.body, {
-            delimiters: [
-              { left: "$$", right: "$$", display: true },
-              { left: "$", right: "$", display: false },
-              { left: "\\(", right: "\\)", display: false },
-              { left: "\\[", right: "\\]", display: true }
-            ],
-            throwOnError: false,
-            ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"]
-          });
-        }
+        // Render math when KaTeX auto-render becomes available
+        waitForGlobal(() => window.renderMathInElement, () => {
+          try {
+            renderMathInElement(document.body, {
+              delimiters: [
+                { left: "$$", right: "$$", display: true },
+                { left: "$", right: "$", display: false },
+                { left: "\\(", right: "\\)", display: false },
+                { left: "\\[", right: "\\]", display: true }
+              ],
+              throwOnError: false,
+              ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code"]
+            });
+          } catch (e) {
+            // noop
+          }
+        }, 40, 200);
+
+        // Highlight static code blocks when hljs is available
+        waitForGlobal(() => window.hljs, () => {
+          try {
+            if (typeof hljs.highlightAll === 'function') hljs.highlightAll();
+          } catch (e) {}
+        }, 40, 200);
       });
     </script>
   </body>

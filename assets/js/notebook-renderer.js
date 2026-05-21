@@ -60,6 +60,23 @@
     }
   };
 
+  // Wait for a global condition then run callback (bounded retries)
+  const waitForGlobal = (testFn, cb, attempts = 20, interval = 150) => {
+    let tries = 0;
+    const id = setInterval(() => {
+      try {
+        if (testFn()) {
+          clearInterval(id);
+          cb();
+          return;
+        }
+      } catch (e) {
+        // ignore
+      }
+      if (++tries >= attempts) clearInterval(id);
+    }, interval);
+  };
+
   const renderCell = (cell) => {
     if (cell.cell_type === "markdown") {
       const source = (cell.source || []).join("");
@@ -93,12 +110,21 @@
         return;
       }
       container.innerHTML = cells.map(renderCell).join("");
-      if (window.hljs) {
-        container.querySelectorAll("pre.nb-source code").forEach((block) => {
-          hljs.highlightElement(block);
-        });
-      }
-      renderMath(container);
+      // Highlight injected code when hljs becomes available
+      waitForGlobal(() => window.hljs, () => {
+        try {
+          container.querySelectorAll("pre.nb-source code").forEach((block) => {
+            hljs.highlightElement(block);
+          });
+        } catch (e) {}
+      }, 40, 150);
+
+      // Render math in injected content when KaTeX auto-render is ready
+      waitForGlobal(() => window.renderMathInElement, () => {
+        try {
+          renderMath(container);
+        } catch (e) {}
+      }, 40, 150);
     })
     .catch((err) => {
       container.textContent = err.message || "Failed to render notebook.";
