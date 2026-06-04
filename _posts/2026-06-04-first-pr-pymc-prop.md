@@ -42,7 +42,11 @@ The split I wanted was:
 - Outer loop (NumPy): burn-in, thinning, particle storage, Gaussian noise.
 - Inner physics (compiled once from PyMC logp graphs): prior score, per-observation likelihood scores, and the full batched log-score drift.
 
-For log-score, the expensive part is `compile_drift_for_logscore` in `pymc_prop/compile.py`. It builds one graph that, for a batch of shape `(p, d)`, returns both the interaction drift and the prior gradient. The log-score interaction uses leave-one-out mixture densities $q_{-j}(x_i)$; we compute them in log-space with log-sum-exp, form importance weights $w_j(x_i) = p_{\vartheta^{(j)}}(x_i) / q_{-j}(x_i)$, clip $\log w_j$ for stability, and sum ${-\sum_i \tilde{w}_{j}(x_i)\,\nabla_{\vartheta} \log p(y_{i} \mid \vartheta^{(j)})}$ over observations. Batching uses `pt.vectorize` over per-particle cores, with a `scan` fallback when vectorisation fails on a particular model graph.
+For log-score, the expensive part is `compile_drift_for_logscore` in `pymc_prop/compile.py`. It builds one graph that, for a batch of shape `(p, d)`, returns both the interaction drift and the prior gradient. The log-score interaction uses leave-one-out mixture densities $q_{-j}(x_i)$; we compute them in log-space with log-sum-exp, form importance weights $w_j(x_i) = p_{\vartheta^{(j)}}(x_i) / q_{-j}(x_i)$, clip $\log w_j$ for stability, and sum the interaction drift over observations:
+
+$$-\sum_{i} \tilde{w}_{j}(x_i)\,\nabla_{\vartheta} \log p(y_{i} \mid \vartheta^{(j)})$$
+
+Batching uses `pt.vectorize` over per-particle cores, with a `scan` fallback when vectorisation fails on a particular model graph.
 
 The main coordination happens in `pymc_prop/sampler.py`. It compiles the drift function one time at the start, then runs it in a loop, each time, it passes the computed gradients to `time_step` in `pymc_prop/particles.py` to update the particles. For handling particle representations, `pymc_prop/points.py` includes utilities like `PointMapper` and `DictToArrayBijection` to convert between flat arrays (used in the engine) and PyMC's `value_vars`, keeping everything matched up with how PyMC organizes unconstrained parameter values.
 
